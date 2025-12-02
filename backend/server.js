@@ -1,16 +1,26 @@
+//Initializations
 const express = require("express");
 const server = express();
 const port = 3000;
-const cors = require("cors");
-const mongoose = require("mongoose");
-const Product = require("./models/product");
 require("dotenv").config();
-const { DB_URI } = process.env;
 
+//Security Initializations
+const cors = require("cors");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+const { SECRET_KEY } = process.env;
+
+//Database Initializations
+const mongoose = require("mongoose");
+const { DB_URI } = process.env;
+const Product = require("./models/product");
+
+//Middleware
 server.use(cors());
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 
+//Server Connection
 mongoose
   .connect(DB_URI)
   .then(() => {
@@ -22,6 +32,7 @@ mongoose
     console.log(error);
   });
 
+//Routes
 server.get("/", (request, response) => {
   response.send("LIVE!");
 });
