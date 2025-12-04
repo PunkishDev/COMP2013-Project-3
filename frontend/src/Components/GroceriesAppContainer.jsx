@@ -4,6 +4,7 @@ import ProductsContainer from "./ProductsContainer";
 import NavBar from "./NavBar";
 import axios from "axios";
 import ProductForm from "./ProductForm";
+import ProductFilterCard from "./ProductFilterCard";
 
 export default function GroceriesAppContainer() {
   /////////// States ///////////
@@ -18,12 +19,14 @@ export default function GroceriesAppContainer() {
     price: "",
   });
   const [isEditing, setIsEditing] = useState(false);
+  //Filter Settings
+  const [selectedFilter, setSelectedFilter] = useState(0);
 
   //////////useEffect////////
 
   useEffect(() => {
     handleProductsFromDB();
-  }, [postResponse]);
+  }, [postResponse, selectedFilter]);
 
   ////////Handlers//////////
   const initialProductQuantity = (prods) =>
@@ -34,8 +37,14 @@ export default function GroceriesAppContainer() {
   const handleProductsFromDB = async () => {
     try {
       await axios.get("http://localhost:3000/products").then((result) => {
-        setProductList(result.data);
-        setProductQuantity(initialProductQuantity(result.data));
+        if(selectedFilter > 0) {
+          const filteredResult = result.data.filter((item) => item.price.replace("$", "").replace(",", "") >= selectedFilter);
+          setProductList(filteredResult);
+          setProductQuantity(initialProductQuantity(filteredResult));
+        } else {
+          setProductList(result.data);
+          setProductQuantity(initialProductQuantity(result.data));
+        }
       });
     } catch (error) {
       console.log(error.message);
@@ -194,6 +203,12 @@ export default function GroceriesAppContainer() {
   const handleClearCart = () => {
     setCartList([]);
   };
+
+  //Filter handlers
+  const handleOnFilterSelect = (e) => {
+    setSelectedFilter(e.target.value);
+  };
+
   /////////Renderer
   return (
     <div>
@@ -205,6 +220,10 @@ export default function GroceriesAppContainer() {
           handleOnChange={handleOnChange}
           formData={formData}
           isEditing={isEditing}
+        />
+        <ProductFilterCard
+          selectedFilter={selectedFilter}
+          handleOnFilterSelect={handleOnFilterSelect}
         />
         <ProductsContainer
           products={productList}
