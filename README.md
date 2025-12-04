@@ -36,3 +36,5 @@
 - ~~Pagination~~
   - ~~Seperation of different tasks into different pages~~
   - ~~Structure app to different routes~~
+- ~~Product Filtering~~
+  - ~~Filter Products based on price~~
