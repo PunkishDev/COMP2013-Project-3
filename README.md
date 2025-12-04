@@ -2,7 +2,7 @@
 
 ## Features
 
-- Pagination
+- ~~Pagination~~
 - Creating User
 - Logging User
 - Private Routing
@@ -33,6 +33,6 @@
 
 ### Jordyn
 
-- Pagination
-  - Seperation of different tasks into different pages
-  - Structure app to different routes
+- ~~Pagination~~
+  - ~~Seperation of different tasks into different pages~~
+  - ~~Structure app to different routes~~
