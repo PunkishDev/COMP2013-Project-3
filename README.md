@@ -36,5 +36,3 @@
 - Pagination
   - Seperation of different tasks into different pages
   - Structure app to different routes
-
-_Testing pull request_
