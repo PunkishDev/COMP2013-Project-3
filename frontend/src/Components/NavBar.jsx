@@ -1,8 +1,20 @@
+import Cookies from "js-cookie";
+import { Navigate } from "react-router-dom";
+
+
 export default function NavBar({ quantity }) {
+  
+   const handleLogout = () => {
+        Cookies.remove("jwt-authorization");
+        setCurrentUser("");
+        Navigate("/");
+    };
+  
   return (
     <nav className="NavBar">
       <div className="NavDiv NavUser">
         <h3>Hello, username</h3>
+        <button onClick={() => handleLogout()}>Logout</button>
       </div>
       <div className="NavDiv NavTitle">
         <h2>Groceries App 🍎</h2>

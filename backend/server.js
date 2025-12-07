@@ -97,3 +97,4 @@ server.patch("/products/:id", async (request, response) => {
     console.log(error.message);
   }
 });
+
