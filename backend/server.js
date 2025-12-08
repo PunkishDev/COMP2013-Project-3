@@ -97,3 +97,47 @@ server.patch("/products/:id", async (request, response) => {
     console.log(error.message);
   }
 });
+
+
+//all of this will be for the login and registration portion of the project
+
+
+
+server.post("/create-user", async (request, response) => {
+  const {username, password} = request.body;
+  try {
+    //hashing password need bcrypt
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new User({
+      username,
+      password: hashedPassword,
+    });
+    await newUser.save();
+    return response.status(200).send({ message: "user Created"});
+  }catch (error) {
+    response.status(500).send(error.message); 
+    console.log("oopsie"); //error testing lol
+  }
+})
+
+
+//login exists
+server.post("/", async (request, response) => {
+  const {username, password} = request.body;
+  try {
+    const user = await User.findOne({ username });
+    if(!user){
+    return response.status(400).send({message: "user does not exist"});
+  }
+  const match = await bcrypt.compare(password, user.password);
+  if(!match){
+     return response.status(403).send({message: "username or password is incorrect"});
+  }
+
+  const jwtToken = jwt.sign({id: user._id, username}, SECRET_KEY  );
+  return response.status(201).send({message: "user authenticated", token: jwtToken});
+
+  }catch (error) {
+    response.status(500).send(error.message);
+  }
+});
