@@ -44,7 +44,7 @@ export default function LoginPage(){
       });
   };
   return <div>
-      <FormComponent formData={formData} postResponse={postResponse} handleOnsubmit={handleOnSubmit} handleOnChange={handleOnChange} nextPage="create-user" currentPage=""/>
+      <FormComponent formData={formData} postResponse={postResponse} handleOnsubmit={handleOnSubmit} handleOnChange={handleOnChange} nextPage="create-user" currentPage="/"/>
 
   </div>
 

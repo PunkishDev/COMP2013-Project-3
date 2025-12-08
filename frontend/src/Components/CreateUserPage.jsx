@@ -43,7 +43,7 @@ export default function CreateUserPage() {
         handleOnChange={handleOnChange} 
         handleOnsubmit={handleOnSubmit} 
         currentPage="create-user"
-        nextPage="" 
+        nextPage="/" 
         postResponse={postResponse}
         />
 

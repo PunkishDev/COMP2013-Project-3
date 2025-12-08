@@ -9,7 +9,7 @@ export default function FormComponent({
 }){
     const navigate = useNavigate();
     return (<div>
-        <h1>{currentPage}</h1>
+        <h1>{nextPage === "/" ? "Create a new User" : "Groceries App"}</h1>
         <form onSubmit={handleOnsubmit}>
             <label htmlFor="username">Username:</label>
             <input type="text" name="username" id="username" value={ formData.username } onChange={handleOnChange}/>
@@ -17,11 +17,18 @@ export default function FormComponent({
             <label htmlFor="password">Password:</label>
             <input type="text" name="password" id="password" value={ formData.password } onChange={handleOnChange}/>
             <br/>
-            <button>Submit</button>
+            <button onClick={() => navigate(`/${nextPage}`)}>{nextPage === "/" ? "Register" : "Login"}</button>
         </form>
         <p>{postResponse}</p>
-        <button onClick={() => navigate(`/${nextPage}`)}>{nextPage === "login" ? "go to login page" : "go to register page"}</button>
-
+         {/* <button onClick={() => navigate(`/${nextPage}`)}>{nextPage === "" ? "Go to login page" : "Go to register page"}</button>*/}
+       <p>{nextPage === "/" 
+       ? "Already a member get back to the home page " 
+       : "Not a member? Please Register " } 
+        {/*seperate link from the question asking if you are a member or if you already are */}
+       {nextPage === "/" 
+       ?  <a href={nextPage}>Here</a> 
+       : <a href={nextPage}>Here</a>} </p>
     </div>
         );
+        
 }

@@ -14,7 +14,7 @@ const { SECRET_KEY } = process.env;
 const mongoose = require("mongoose");
 const { DB_URI } = process.env;
 const Product = require("./models/product");
-
+const User = require("./models/user");
 //Middleware
 server.use(cors());
 server.use(express.json());
@@ -116,6 +116,7 @@ server.post("/create-user", async (request, response) => {
     return response.status(200).send({ message: "user Created"});
   }catch (error) {
     response.status(500).send(error.message); 
+    //console.log("Error during create-user:", error);
     console.log("oopsie"); //error testing lol
   }
 })
