@@ -35,8 +35,8 @@ export default function GroceriesAppContainer() {
             const decodedToken = jwtDecode(jwtToken);
             return {
               username: decodedToken.username,
-              //Added a role token portion so the isAdmin will allow admin access or general user access below
-              isAdmin: decodedToken.role == true,
+              //Added to determine isAdmin will allow admin access or general user access below
+              isAdmin: decodedToken.isAdmin,
             };
         } catch {
             return "";
@@ -52,7 +52,7 @@ export default function GroceriesAppContainer() {
         }
     },[]);
 
-  /////////WILL CLEAR ANYTHING UNNECESSARY
+  /////////
 
   //////////useEffect////////
 
