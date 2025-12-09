@@ -1,2 +1,1 @@
-DB_URI = "mongodb+srv://punkish:database123@cluster0.qanof.mongodb.net/groceries?appName=Cluster0"
-SECRET_KEY = "ThisIsASecretKey"
+
