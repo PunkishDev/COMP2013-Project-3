@@ -48,7 +48,9 @@ export default function ProductForm({
           onChange={handleOnChange}
         />
         <br />
-        <button type="submit">{isEditing ? "Edit" : "Submit"}</button>
+        <button type="submit">
+          {isEditing ? `Edit formData.productName` : "Submit"}
+        </button>
       </form>
       {postResponse && <p>{postResponse}</p>}
     </div>
