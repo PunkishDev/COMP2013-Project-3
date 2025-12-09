@@ -12,6 +12,10 @@ const userSchema = new Schema({
         required: true,
 
     },
+    isAdmin: {
+        type: Boolean,
+        required: false, //sayings its not required to hopefully save on issues later with users that dont have it
+    },
 });
 
 const User = mongoose.model("User", userSchema);

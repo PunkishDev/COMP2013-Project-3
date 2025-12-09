@@ -4,51 +4,61 @@ import { useState} from "react";
 import { useNavigate } from "react-router-dom";
 //import { useRoutes } from "react-router-dom";
 export default function CreateUserPage() {
-    //states
-    const[formData, setFormData] = useState({username: "", password: ""});
-    const [postResponse, setPostResponse] = useState("");
+//states
+const[formData, setFormData] = useState({username: "", password: "", isAdmin: false});
+const [postResponse, setPostResponse] = useState("");
 
-    const navigate = useNavigate();
+const navigate = useNavigate();
 
-    //handlsers
-    const handleOnChange = (e) => {
-        setFormData((prevData) => {
-            return{...prevData, [e.target.name]:e.target.value};
-        });
-    };
+//handlers
+const handleOnChange = (e) => {
+    setFormData((prevData) => {
+        return{...prevData, [e.target.name]:e.target.value};
+    });
+};
 
-    const handleRegister = async () => {
-        try {
-            const response = await axios.post("http://localhost:3000/create-user", {
-                ...formData,
-            })
-            setPostResponse(response.data.message);
-            if(response.status === 200)
-            {
-                navigate("/");
-            }
-        }catch(error){
-            console.log(error);
+//one specifically for the checkbox
+const handleOnChecked = (e) => {
+    setFormData((prevData) => {
+        return{...prevData, isAdmin: e.target.checked};
+    });
+};
+const handleRegister = async (e) => {
+  e.preventDefault(); //hopefully going to stop the error messages not showing up for the user
+    try {
+        const response = await axios.post("http://localhost:3000/create-user", {
+            ...formData,
+        })
+        setPostResponse(response.data.message);
+        if(response.status === 200)
+        {
+            navigate("/");
         }
+    }catch(error){
+        console.log(error);
+        setPostResponse(error.response?.data?.message || "Something went wrong"); //after so long the error
+        //was because i wasnt passing the post response through so when it went to output it it didnt
     }
-    
-    const handleOnSubmit = (e) => {
-        e.preventDefault();
-        handleRegister();
-        setFormData({username: "", password: ""});
-    }
-    return (
-        <div>
-        <FormComponent formData={formData} 
-        handleOnChange={handleOnChange} 
-        handleOnsubmit={handleOnSubmit} 
-        currentPage="create-user"
-        nextPage="/" 
-        postResponse={postResponse}
-        />
+}
 
-        </div>
-    );
+const handleOnSubmit = (e) => {
+    e.preventDefault(); 
+    handleRegister(e); //passes so that errors can be seen
+    setFormData({username: "", password: "", isAdmin: false});
+} 
+return (
+    <div>
+    <FormComponent formData={formData} 
+    handleOnChange={handleOnChange} 
+    handleOnsubmit={handleOnSubmit} 
+    handleOnChecked={handleOnChecked}
+    currentPage="create-user"
+    nextPage="/" 
+    postResponse={postResponse}
+    />
+
+    </div>
+);
 }
 
 //referenced from lecture and previous code

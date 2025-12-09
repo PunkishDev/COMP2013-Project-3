@@ -17,7 +17,8 @@ export default function LoginPage(){
     });
   };
 
-  const handleLogin = async() => {
+  const handleLogin = async(e) => {
+    e.preventDefault();
     try {
         const response = await axios.post("http://localhost:3000/", {
             ...formData,
@@ -29,14 +30,13 @@ export default function LoginPage(){
         }
     } catch (error) {
         setPostResponse(
-            error?.response?.data?.message || "login failed"
-);
+            error?.response?.data?.message || "login failed");
       }
   }
 
   const handleOnSubmit = (e) => {
       e.preventDefault();
-      handleLogin();
+      handleLogin(e);
       setFormData({
           username: "",
           password: "",

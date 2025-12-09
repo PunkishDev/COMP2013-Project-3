@@ -104,27 +104,40 @@ server.patch("/products/:id", async (request, response) => {
 
 
 server.post("/create-user", async (request, response) => {
-  const {username, password} = request.body;
+  const {username, password, isAdmin} = request.body;
+  console.log("BODY:", request.body);
   try {
     //hashing password need bcrypt
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({
       username,
       password: hashedPassword,
+      isAdmin,
     });
     await newUser.save();
     return response.status(200).send({ message: "user Created"});
   }catch (error) {
-    response.status(500).send(error.message); 
-    //console.log("Error during create-user:", error);
-    console.log("oopsie"); //error testing lol
+    console.log("Error during create-user:", error);
+    //console.log("oopsie"); //error testing lol
+    
+    //checks for a duplicate username in the db
+    if (error.code === 11000) {
+      return response.status(400).send({
+        message: "Username already exists!"
+      });
+    }
+
+    // Generic server error
+    return response.status(500).send({
+      message: "Server error. Please try again."
+      });
   }
 })
 
 
 //login exists
 server.post("/", async (request, response) => {
-  const {username, password} = request.body;
+  const {username, password, isAdmin} = request.body;
   try {
     const user = await User.findOne({ username });
     if(!user){
@@ -135,7 +148,7 @@ server.post("/", async (request, response) => {
      return response.status(403).send({message: "username or password is incorrect"});
   }
 
-  const jwtToken = jwt.sign({id: user._id, username}, SECRET_KEY  );
+  const jwtToken = jwt.sign({id: user._id, username, id: user.isAdmin}, SECRET_KEY  );
   return response.status(201).send({message: "user authenticated", token: jwtToken});
 
   }catch (error) {
