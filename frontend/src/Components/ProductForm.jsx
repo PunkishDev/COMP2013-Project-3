@@ -49,7 +49,7 @@ export default function ProductForm({
         />
         <br />
         <button type="submit">
-          {isEditing ? `Edit formData.productName` : "Submit"}
+          {isEditing ? `Edit ${formData.productName}` : "Submit"}
         </button>
       </form>
       {postResponse && <p>{postResponse}</p>}
