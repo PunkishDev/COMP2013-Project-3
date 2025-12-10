@@ -19,9 +19,10 @@
 ### Rebekah
 
 - User Authorization
-  - Handling redirect for non authorized users
-  - Revealing the add product, edit and delete functions for admin users
-  - Ensuring users acessing add and edit pages are authorized with admin privileges
+  - ~~Handling redirect for non authorized users~~
+  - ~~Revealing the add product, edit and delete functions for admin users~~
+  - ~~Ensuring users acessing add and edit pages are authorized with admin privileges~~
+  - ~~Logout button for /main~~
 
 ### Richard
 
