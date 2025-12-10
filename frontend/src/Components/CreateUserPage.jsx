@@ -1,95 +1,67 @@
 import FormComponent from "./FormComponent";
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
-import Cookies from "js-cookie";
-import { useState, useEffect} from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 //import { useRoutes } from "react-router-dom";
 export default function CreateUserPage() {
-//states
-const[formData, setFormData] = useState({username: "", password: "", isAdmin: false});
-const [postResponse, setPostResponse] = useState("");
+  //states
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+    isAdmin: false,
+  });
+  const [postResponse, setPostResponse] = useState("");
 
-//const navigate = useNavigate(); -- removed only because it's moved below for authorization
-  /////////////ADDING THIS TO CHECK AUTHORIZATION
-  const [currentUser, setCurrentUser] = useState(() => {
-        const jwtToken = Cookies.get("jwt-authorization");
-        if(!jwtToken){
-            return ""; 
-        }
-        try{
-            const decodedToken = jwtDecode(jwtToken);
-            return {
-              username: decodedToken.username,
-              //Added to determine isAdmin will allow admin access or general user access below
-              isAdmin: decodedToken.isAdmin,
-            };
-        } catch {
-            return "";
-        }
-    });
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
-    const location = useLocation();
-    console.log(location);
-    useEffect(() => {
-        if(!currentUser || !currentUser.isAdmin){
-            navigate("/not-authorized");
-        }
-    },[currentUser, navigate]);
-
-  /////////
-
-
-//handlers
-const handleOnChange = (e) => {
+  //handlers
+  const handleOnChange = (e) => {
     setFormData((prevData) => {
-        return{...prevData, [e.target.name]:e.target.value};
+      return { ...prevData, [e.target.name]: e.target.value };
     });
-};
+  };
 
-//one specifically for the checkbox
-const handleOnChecked = (e) => {
+  //one specifically for the checkbox
+  const handleOnChecked = (e) => {
     setFormData((prevData) => {
-        return{...prevData, isAdmin: e.target.checked};
+      return { ...prevData, isAdmin: e.target.checked };
     });
-};
-const handleRegister = async (e) => {
-  e.preventDefault(); //hopefully going to stop the error messages not showing up for the user
+  };
+  const handleRegister = async (e) => {
+    e.preventDefault(); //hopefully going to stop the error messages not showing up for the user
     try {
-        const response = await axios.post("http://localhost:3000/create-user", {
-            ...formData,
-        })
-        setPostResponse(response.data.message);
-        if(response.status === 200)
-        {
-            navigate("/");
-        }
-    }catch(error){
-        console.log(error);
-        setPostResponse(error.response?.data?.message || "Something went wrong"); //after so long the error
-        //was because i wasnt passing the post response through so when it went to output it it didnt
+      const response = await axios.post("http://localhost:3000/create-user", {
+        ...formData,
+      });
+      setPostResponse(response.data.message);
+      if (response.status === 200) {
+        navigate("/");
+      }
+    } catch (error) {
+      console.log(error);
+      setPostResponse(error.response?.data?.message || "Something went wrong"); //after so long the error
+      //was because i wasnt passing the post response through so when it went to output it it didnt
     }
-}
+  };
 
-const handleOnSubmit = (e) => {
-    e.preventDefault(); 
+  const handleOnSubmit = (e) => {
+    e.preventDefault();
     handleRegister(e); //passes so that errors can be seen
-    setFormData({username: "", password: "", isAdmin: false});
-} 
-return (
+    setFormData({ username: "", password: "", isAdmin: false });
+  };
+  return (
     <div>
-    <FormComponent formData={formData} 
-    handleOnChange={handleOnChange} 
-    handleOnsubmit={handleOnSubmit} 
-    handleOnChecked={handleOnChecked}
-    currentPage="create-user"
-    nextPage="/" 
-    postResponse={postResponse}
-    />
-
+      <FormComponent
+        formData={formData}
+        handleOnChange={handleOnChange}
+        handleOnsubmit={handleOnSubmit}
+        handleOnChecked={handleOnChecked}
+        currentPage="create-user"
+        nextPage="/"
+        postResponse={postResponse}
+      />
     </div>
-);
+  );
 }
 
 //referenced from lecture and previous code
