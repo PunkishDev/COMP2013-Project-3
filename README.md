@@ -3,9 +3,9 @@
 ## Features
 
 - ~~Pagination~~
-- Creating User
-- Logging User
-- Private Routing
+- ~~Creating User~~
+- ~~Logging User~~
+- ~~Private Routing~~
 
 ## Group Member Seperations
 
@@ -18,18 +18,19 @@
 
 ### Rebekah
 
-- User Authorization
-  - Handling redirect for non authorized users
-  - Revealing the add product, edit and delete functions for admin users
-  - Ensuring users acessing add and edit pages are authorized with admin privileges
+- ~~User Authorization~~
+  - ~~Handling redirect for non authorized users~~
+  - ~~Revealing the add product, edit and delete functions for admin users~~
+  - ~~Ensuring users acessing add and edit pages are authorized with admin privileges~~
+  - ~~Logout button for /main~~
 
 ### Richard
 
-- Login
-  - User login
-  - Setting cookies for user authorization
-- Registration
-  - Password hashing
+- ~~Login~~
+  - ~~User login~~
+  - ~~Setting cookies for user authorization~~
+- ~~Registration~~
+  - ~~Password hashing~~
 
 ### Jordyn
 

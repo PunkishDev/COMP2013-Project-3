@@ -1,9 +1,39 @@
 import ProductForm from "./ProductForm";
-import { useNavigate, Link } from "react-router-dom";
-import { useState } from "react";
+import { jwtDecode } from "jwt-decode";
+import Cookies from "js-cookie";
+import { useState, useEffect} from "react";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import axios from "axios";
 export default function EditProductPage() {
-  const navigate = useNavigate();
+  
+   /////////////ADDING THIS TO CHECK AUTHORIZATION
+    const [currentUser, setCurrentUser] = useState(() => {
+          const jwtToken = Cookies.get("jwt-authorization");
+          if(!jwtToken){
+              return ""; 
+          }
+          try{
+              const decodedToken = jwtDecode(jwtToken);
+              return {
+                username: decodedToken.username,
+                //Added to determine isAdmin will allow admin access or general user access below
+                isAdmin: decodedToken.isAdmin,
+              };
+          } catch {
+              return "";
+          }
+      });
+  
+      const navigate = useNavigate();
+      const location = useLocation();
+      console.log(location);
+      useEffect(() => {
+          if(!currentUser || !currentUser.isAdmin){
+              navigate("/not-authorized");
+          }
+      },[currentUser, navigate]);
+  
+    /////////
   const [postResponse, setPostResponse] = useState("");
   const [isEditing, setIsEditing] = useState(true);
   const [formData, setFormData] = useState({

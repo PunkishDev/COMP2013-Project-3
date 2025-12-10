@@ -1,14 +1,45 @@
 import FormComponent from "./FormComponent";
 import axios from "axios";
-import { useState} from "react";
-import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+import Cookies from "js-cookie";
+import { useState, useEffect} from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 //import { useRoutes } from "react-router-dom";
 export default function CreateUserPage() {
 //states
 const[formData, setFormData] = useState({username: "", password: "", isAdmin: false});
 const [postResponse, setPostResponse] = useState("");
 
-const navigate = useNavigate();
+//const navigate = useNavigate(); -- removed only because it's moved below for authorization
+  /////////////ADDING THIS TO CHECK AUTHORIZATION
+  const [currentUser, setCurrentUser] = useState(() => {
+        const jwtToken = Cookies.get("jwt-authorization");
+        if(!jwtToken){
+            return ""; 
+        }
+        try{
+            const decodedToken = jwtDecode(jwtToken);
+            return {
+              username: decodedToken.username,
+              //Added to determine isAdmin will allow admin access or general user access below
+              isAdmin: decodedToken.isAdmin,
+            };
+        } catch {
+            return "";
+        }
+    });
+
+    const navigate = useNavigate();
+    const location = useLocation();
+    console.log(location);
+    useEffect(() => {
+        if(!currentUser || !currentUser.isAdmin){
+            navigate("/not-authorized");
+        }
+    },[currentUser, navigate]);
+
+  /////////
+
 
 //handlers
 const handleOnChange = (e) => {
