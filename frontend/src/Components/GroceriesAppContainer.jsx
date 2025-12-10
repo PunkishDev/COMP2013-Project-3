@@ -126,6 +126,8 @@ export default function GroceriesAppContainer() {
       price: product.price,
       _id: product._id,
     });
+
+    navigate("/edit-product", {state: formData});
     setIsEditing(true);
     setPostResponse("");
   };

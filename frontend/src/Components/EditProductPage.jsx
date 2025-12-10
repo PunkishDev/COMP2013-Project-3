@@ -1,46 +1,50 @@
 import ProductForm from "./ProductForm";
 import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
-import { useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import axios from "axios";
 export default function EditProductPage() {
-  
-   /////////////ADDING THIS TO CHECK AUTHORIZATION
-    const [currentUser, setCurrentUser] = useState(() => {
-          const jwtToken = Cookies.get("jwt-authorization");
-          if(!jwtToken){
-              return ""; 
-          }
-          try{
-              const decodedToken = jwtDecode(jwtToken);
-              return {
-                username: decodedToken.username,
-                //Added to determine isAdmin will allow admin access or general user access below
-                isAdmin: decodedToken.isAdmin,
-              };
-          } catch {
-              return "";
-          }
-      });
-  
-      const navigate = useNavigate();
-      const location = useLocation();
-      console.log(location);
-      useEffect(() => {
-          if(!currentUser || !currentUser.isAdmin){
-              navigate("/not-authorized");
-          }
-      },[currentUser, navigate]);
-  
-    /////////
+  /////////////ADDING THIS TO CHECK AUTHORIZATION
+
+  const [currentUser, setCurrentUser] = useState(() => {
+    const jwtToken = Cookies.get("jwt-authorization");
+    if (!jwtToken) {
+      return "";
+    }
+    try {
+      const decodedToken = jwtDecode(jwtToken);
+      return {
+        username: decodedToken.username,
+        //Added to determine isAdmin will allow admin access or general user access below
+        isAdmin: decodedToken.isAdmin,
+      };
+    } catch {
+      return "";
+    }
+  });
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  console.log(location);
+
+  useEffect(() => {
+    if (!currentUser || !currentUser.isAdmin) {
+      navigate("/not-authorized");
+    } /*else if (!location.state) {
+      navigate("/main");
+    }*/
+  }, [currentUser, navigate]);
+
+  /////////
+  const stateFormData = location.state;
   const [postResponse, setPostResponse] = useState("");
-  const [isEditing, setIsEditing] = useState(true);
+  const isEditing = true;
   const [formData, setFormData] = useState({
-    productName: "",
-    brand: "",
-    image: "",
-    price: "",
+    productName: stateFormData.productName,
+    brand: stateFormData.brand,
+    image: stateFormData.image,
+    price: stateFormData.price,
   });
 
   const handleOnChange = (e) => {
@@ -48,35 +52,11 @@ export default function EditProductPage() {
   };
 
   const handleOnSubmit = async (e) => {
-    if (isEditing) {
+    try {
       e.preventDefault();
-      handleUpdateProduct(formData._id);
-      /*
-      setIsEditing(false);
-      setFormData({
-        productName: "",
-        brand: "",
-        image: "",
-        price: "",
-      });
-      */
-    } else {
-      e.preventDefault();
-      try {
-        await axios
-          .post("http://localhost:3000/add-product", formData)
-          .then((result) => {
-            setPostResponse(result.data);
-          });
-        setFormData({
-          productName: "",
-          brand: "",
-          image: "",
-          price: "",
-        });
-      } catch (error) {
-        console.log(error.message);
-      }
+      handleUpdateProduct(stateFormData._id);
+    } catch (error) {
+      console.log(error.message);
     }
   };
 
@@ -114,13 +94,13 @@ export default function EditProductPage() {
       </p>
       <p>i'll just set it to true and won't change it.</p>
       <p>and i need to modify the onSubmit function so there's no ref</p>
-      {/*<ProductForm
+      <ProductForm
         handleOnSubmit={handleOnSubmit}
         handleOnChange={handleOnChange}
         formData={formData}
         postResponse={postResponse}
         isEditing={true}
-      />*/}
+      />
       <br />
       <br />
       <br />
