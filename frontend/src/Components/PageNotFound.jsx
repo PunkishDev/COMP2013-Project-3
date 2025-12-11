@@ -4,7 +4,7 @@ export default function PageNotFound() {
   return (
     <div>
       <h1>
-        🦖
+        🐢
         <br />
         Page Not Found
       </h1>

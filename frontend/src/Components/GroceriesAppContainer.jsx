@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom"; 
+import { useNavigate, useLocation } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import Cookies from "js-cookie"; 
+import Cookies from "js-cookie";
 import CartContainer from "./CartContainer";
 import ProductsContainer from "./ProductsContainer";
 import NavBar from "./NavBar";
@@ -27,30 +27,30 @@ export default function GroceriesAppContainer() {
 
   /////////////ADDING THIS TO CHECK AUTHORIZATION
   const [currentUser, setCurrentUser] = useState(() => {
-        const jwtToken = Cookies.get("jwt-authorization");
-        if(!jwtToken){
-            return ""; 
-        }
-        try{
-            const decodedToken = jwtDecode(jwtToken);
-            return {
-              username: decodedToken.username,
-              //Added to determine isAdmin will allow admin access or general user access below
-              isAdmin: decodedToken.isAdmin,
-            };
-        } catch {
-            return "";
-        }
-    });
+    const jwtToken = Cookies.get("jwt-authorization");
+    if (!jwtToken) {
+      return "";
+    }
+    try {
+      const decodedToken = jwtDecode(jwtToken);
+      return {
+        username: decodedToken.username,
+        //Added to determine isAdmin will allow admin access or general user access below
+        isAdmin: decodedToken.isAdmin,
+      };
+    } catch {
+      return "";
+    }
+  });
 
-    const navigate = useNavigate();
-    const location = useLocation();
-    console.log(location);
-    useEffect(() => {
-        if(!currentUser){
-            navigate("/not-authorized");
-        }
-    },[]);
+  const navigate = useNavigate();
+  const location = useLocation();
+  console.log(location);
+  useEffect(() => {
+    if (!currentUser) {
+      navigate("/not-authorized");
+    }
+  }, []);
 
   /////////
 
@@ -69,8 +69,11 @@ export default function GroceriesAppContainer() {
   const handleProductsFromDB = async () => {
     try {
       await axios.get("http://localhost:3000/products").then((result) => {
-        if(selectedFilter > 0) {
-          const filteredResult = result.data.filter((item) => item.price.replace("$", "").replace(",", "") >= selectedFilter);
+        if (selectedFilter > 0) {
+          const filteredResult = result.data.filter(
+            (item) =>
+              item.price.replace("$", "").replace(",", "") >= selectedFilter
+          );
           setProductList(filteredResult);
           setProductQuantity(initialProductQuantity(filteredResult));
         } else {
@@ -119,14 +122,17 @@ export default function GroceriesAppContainer() {
   };
 
   const handleEditProduct = (product) => {
+    /*
     setFormData({
-      productName: product.productName,
-      brand: product.brand,
-      image: product.image,
       price: product.price,
+      brand: product.brand,
+      productName: product.productName,
+      image: product.image,
       _id: product._id,
-    });
-    setIsEditing(true);
+    });*/
+    console.log(formData);
+    navigate("/edit-product", { state: product });
+    //setIsEditing(true);
     setPostResponse("");
   };
 
@@ -243,71 +249,69 @@ export default function GroceriesAppContainer() {
 
   /////////Renderer
   return (
-  <div>
-  {/*//Adding this for authentication - top portion of ternary is original return bottoms after : is if not admin logged in option*/}
     <div>
-      {currentUser.isAdmin ? (
-        <div>
-	        <NavBar quantity={cartList.length} />
-        <div className="GroceriesApp-Container">
-          <ProductForm
-            handleOnSubmit={handleOnSubmit}
-            postResponse={postResponse}
-            handleOnChange={handleOnChange}
-            formData={formData}
-            isEditing={isEditing}
-          />
-        <ProductFilterCard
-          selectedFilter={selectedFilter}
-          handleOnFilterSelect={handleOnFilterSelect}
-        />
-        <ProductsContainer
-          products={productList}
-          handleAddQuantity={handleAddQuantity}
-          handleRemoveQuantity={handleRemoveQuantity}
-          handleAddToCart={handleAddToCart}
-          productQuantity={productQuantity}
-          handleEditProduct={handleEditProduct}
-          handleDeleteProduct={handleDeleteProduct}
-        />
-        <CartContainer
-          cartList={cartList}
-          handleRemoveFromCart={handleRemoveFromCart}
-          handleAddQuantity={handleAddQuantity}
-          handleRemoveQuantity={handleRemoveQuantity}
-          handleClearCart={handleClearCart}
-        />
-       </div>
-   </div>
-      ) : (
-        <div>
-          <NavBar quantity={cartList.length} />
-          <div className="GroceriesApp-Container">
-          <ProductFilterCard
-           selectedFilter={selectedFilter}
-           handleOnFilterSelect={handleOnFilterSelect}
-          />
-          <ProductsContainer
-           products={productList}
-           handleAddQuantity={handleAddQuantity}
-           handleRemoveQuantity={handleRemoveQuantity}
-           handleAddToCart={handleAddToCart}
-           productQuantity={productQuantity}
-          />
-          <CartContainer
-           cartList={cartList}
-           handleRemoveFromCart={handleRemoveFromCart}
-           handleAddQuantity={handleAddQuantity}
-           handleRemoveQuantity={handleRemoveQuantity}
-           handleClearCart={handleClearCart}
-          />
+      {/*//Adding this for authentication - top portion of ternary is original return bottoms after : is if not admin logged in option*/}
+      <div>
+        {currentUser.isAdmin ? (
+          <div>
+            <NavBar quantity={cartList.length} isAdmin={currentUser.isAdmin} />
+            <div className="GroceriesApp-Container">
+              {/* <ProductForm
+                handleOnSubmit={handleOnSubmit}
+                postResponse={postResponse}
+                handleOnChange={handleOnChange}
+                formData={formData}
+                isEditing={isEditing}
+              /> */}
+              <ProductFilterCard
+                selectedFilter={selectedFilter}
+                handleOnFilterSelect={handleOnFilterSelect}
+              />
+              <ProductsContainer
+                products={productList}
+                handleAddQuantity={handleAddQuantity}
+                handleRemoveQuantity={handleRemoveQuantity}
+                handleAddToCart={handleAddToCart}
+                productQuantity={productQuantity}
+                handleEditProduct={handleEditProduct}
+                handleDeleteProduct={handleDeleteProduct}
+              />
+              <CartContainer
+                cartList={cartList}
+                handleRemoveFromCart={handleRemoveFromCart}
+                handleAddQuantity={handleAddQuantity}
+                handleRemoveQuantity={handleRemoveQuantity}
+                handleClearCart={handleClearCart}
+              />
+            </div>
           </div>
-        </div>
-      )
-      }
+        ) : (
+          <div>
+            <NavBar quantity={cartList.length} isAdmin={currentUser.isAdmin} />
+            <div className="GroceriesApp-Container">
+              <ProductFilterCard
+                selectedFilter={selectedFilter}
+                handleOnFilterSelect={handleOnFilterSelect}
+              />
+              <ProductsContainer
+                products={productList}
+                handleAddQuantity={handleAddQuantity}
+                handleRemoveQuantity={handleRemoveQuantity}
+                handleAddToCart={handleAddToCart}
+                productQuantity={productQuantity}
+              />
+              <CartContainer
+                cartList={cartList}
+                handleRemoveFromCart={handleRemoveFromCart}
+                handleAddQuantity={handleAddQuantity}
+                handleRemoveQuantity={handleRemoveQuantity}
+                handleClearCart={handleClearCart}
+              />
+            </div>
+          </div>
+        )}
+      </div>
+      {/*///////////Added for authentication*/}
     </div>
-  {/*///////////Added for authentication*/}
-    
-  </div>
   );
 }
