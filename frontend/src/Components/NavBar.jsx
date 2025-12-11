@@ -1,15 +1,13 @@
 import Cookies from "js-cookie";
-import { Navigate } from "react-router-dom";
+import { Navigate, Link } from "react-router-dom";
 
+export default function NavBar({ quantity, isAdmin }) {
+  const handleLogout = () => {
+    Cookies.remove("jwt-authorization");
+    setCurrentUser("");
+    Navigate("/");
+  };
 
-export default function NavBar({ quantity }) {
-  
-   const handleLogout = () => {
-        Cookies.remove("jwt-authorization");
-        setCurrentUser("");
-        Navigate("/");
-    };
-  
   return (
     <nav className="NavBar">
       <div className="NavDiv NavUser">
@@ -19,6 +17,7 @@ export default function NavBar({ quantity }) {
       <div className="NavDiv NavTitle">
         <h2>Groceries App 🍎</h2>
       </div>
+
       <div className="NavDiv NavCart">
         <img
           src={
@@ -28,6 +27,11 @@ export default function NavBar({ quantity }) {
           }
         />
       </div>
+      {isAdmin && (
+        <button>
+          <Link to="/add-product">Add A Product</Link>
+        </button>
+      )}
     </nav>
   );
 }

@@ -84,16 +84,6 @@ export default function EditProductPage() {
   return (
     <div>
       <h1>Edit Product</h1>
-      <p>As of right now, this feature is incomplete.</p>
-      <p>the product form is commented out so no one can attempt to use it.</p>
-      <p>
-        I need to rewatch the cookies lecture so i know how to grab the formdata
-      </p>
-      <p>
-        I also need to remove the code that only runs when IsEdting is false
-      </p>
-      <p>i'll just set it to true and won't change it.</p>
-      <p>and i need to modify the onSubmit function so there's no ref</p>
       <ProductForm
         handleOnSubmit={handleOnSubmit}
         handleOnChange={handleOnChange}

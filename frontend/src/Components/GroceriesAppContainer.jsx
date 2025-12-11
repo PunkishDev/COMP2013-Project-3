@@ -122,15 +122,16 @@ export default function GroceriesAppContainer() {
   };
 
   const handleEditProduct = (product) => {
+    /*
     setFormData({
       price: product.price,
       brand: product.brand,
       productName: product.productName,
       image: product.image,
       _id: product._id,
-    });
-
-    navigate("/edit-product", { state: formData });
+    });*/
+    console.log(formData);
+    navigate("/edit-product", { state: product });
     //setIsEditing(true);
     setPostResponse("");
   };
@@ -253,15 +254,15 @@ export default function GroceriesAppContainer() {
       <div>
         {currentUser.isAdmin ? (
           <div>
-            <NavBar quantity={cartList.length} />
+            <NavBar quantity={cartList.length} isAdmin={currentUser.isAdmin} />
             <div className="GroceriesApp-Container">
-              <ProductForm
+              {/* <ProductForm
                 handleOnSubmit={handleOnSubmit}
                 postResponse={postResponse}
                 handleOnChange={handleOnChange}
                 formData={formData}
                 isEditing={isEditing}
-              />
+              /> */}
               <ProductFilterCard
                 selectedFilter={selectedFilter}
                 handleOnFilterSelect={handleOnFilterSelect}
@@ -286,7 +287,7 @@ export default function GroceriesAppContainer() {
           </div>
         ) : (
           <div>
-            <NavBar quantity={cartList.length} />
+            <NavBar quantity={cartList.length} isAdmin={currentUser.isAdmin} />
             <div className="GroceriesApp-Container">
               <ProductFilterCard
                 selectedFilter={selectedFilter}
