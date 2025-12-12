@@ -1,7 +1,7 @@
 import Cookies from "js-cookie";
 import { Navigate, Link } from "react-router-dom";
 
-export default function NavBar({ quantity, isAdmin }) {
+export default function NavBar({ quantity, isAdmin, currentUser }) {
   const handleLogout = () => {
     Cookies.remove("jwt-authorization");
     setCurrentUser("");
@@ -11,7 +11,7 @@ export default function NavBar({ quantity, isAdmin }) {
   return (
     <nav className="NavBar">
       <div className="NavDiv NavUser">
-        <h3>Hello, username</h3>
+        <h3>Hello, {currentUser}</h3>
         <button onClick={() => handleLogout()}>Logout</button>
       </div>
       <div className="NavDiv NavTitle">

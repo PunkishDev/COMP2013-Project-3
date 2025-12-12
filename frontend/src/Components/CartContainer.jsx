@@ -1,4 +1,6 @@
 import CartCard from "./CartCard";
+
+
 export default function CartContainer({
   cartList,
   handleRemoveFromCart,
@@ -6,6 +8,7 @@ export default function CartContainer({
   handleRemoveQuantity,
   handleClearCart,
 }) {
+
   return (
     <div className="CartContainer">
       <h2>Cart items: {cartList.length}</h2>
