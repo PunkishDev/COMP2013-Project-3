@@ -6,7 +6,6 @@ import CartContainer from "./CartContainer";
 import ProductsContainer from "./ProductsContainer";
 import NavBar from "./NavBar";
 import axios from "axios";
-import ProductForm from "./ProductForm";
 import ProductFilterCard from "./ProductFilterCard";
 
 export default function GroceriesAppContainer() {
@@ -15,13 +14,6 @@ export default function GroceriesAppContainer() {
   const [cartList, setCartList] = useState([]);
   const [productList, setProductList] = useState([]);
   const [postResponse, setPostResponse] = useState("");
-  const [formData, setFormData] = useState({
-    productName: "",
-    brand: "",
-    image: "",
-    price: "",
-  });
-  const [isEditing, setIsEditing] = useState(false);
   //Filter Settings
   const [selectedFilter, setSelectedFilter] = useState(0);
 
@@ -51,8 +43,6 @@ export default function GroceriesAppContainer() {
       navigate("/not-authorized");
     }
   }, []);
-
-  /////////
 
   //////////useEffect////////
 
@@ -86,73 +76,10 @@ export default function GroceriesAppContainer() {
     }
   };
 
-  const handleOnChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleOnSubmit = async (e) => {
-    if (isEditing) {
-      e.preventDefault();
-      handleUpdateProduct(formData._id);
-      setIsEditing(false);
-      setFormData({
-        productName: "",
-        brand: "",
-        image: "",
-        price: "",
-      });
-    } else {
-      e.preventDefault();
-      try {
-        await axios
-          .post("http://localhost:3000/add-product", formData)
-          .then((result) => {
-            setPostResponse(result.data);
-          });
-        setFormData({
-          productName: "",
-          brand: "",
-          image: "",
-          price: "",
-        });
-      } catch (error) {
-        console.log(error.message);
-      }
-    }
-  };
-
   const handleEditProduct = (product) => {
-    /*
-    setFormData({
-      price: product.price,
-      brand: product.brand,
-      productName: product.productName,
-      image: product.image,
-      _id: product._id,
-    });*/
-    console.log(formData);
+    //Navigate to the editing page with the product passed as a parameter
     navigate("/edit-product", { state: product });
-    //setIsEditing(true);
     setPostResponse("");
-  };
-
-  const handleUpdateProduct = async (productId) => {
-    try {
-      await axios
-        .patch(`http://localhost:3000/products/${productId}`, formData)
-        .then((result) => {
-          setPostResponse(result.data);
-        });
-      setFormData({
-        productName: "",
-        brand: "",
-        image: "",
-        price: "",
-      });
-      setIsEditing(false);
-    } catch (error) {
-      console.log(error.message);
-    }
   };
 
   const handleAddQuantity = (productId, mode) => {
@@ -248,72 +175,66 @@ export default function GroceriesAppContainer() {
   };
 
   /////////Renderer
-  return (
+  return currentUser.isAdmin ? (
     <div>
-      {/*//Adding this for authentication - top portion of ternary is original return bottoms after : is if not admin logged in option*/}
-      <div>
-        {currentUser.isAdmin ? (
-          <div>
-            <NavBar quantity={cartList.length} isAdmin={currentUser.isAdmin} currentUser = {currentUser.username} setCurrentUser={setCurrentUser}/>
-            <div className="GroceriesApp-Container">
-              {/* <ProductForm
-                handleOnSubmit={handleOnSubmit}
-                postResponse={postResponse}
-                handleOnChange={handleOnChange}
-                formData={formData}
-                isEditing={isEditing}
-              /> */}
-              <ProductFilterCard
-                selectedFilter={selectedFilter}
-                handleOnFilterSelect={handleOnFilterSelect}
-              />
-              <ProductsContainer
-                products={productList}
-                handleAddQuantity={handleAddQuantity}
-                handleRemoveQuantity={handleRemoveQuantity}
-                handleAddToCart={handleAddToCart}
-                productQuantity={productQuantity}
-                handleEditProduct={handleEditProduct}
-                handleDeleteProduct={handleDeleteProduct}
-                isAdmin={currentUser.isAdmin}
-              />
-              <CartContainer
-                cartList={cartList}
-                handleRemoveFromCart={handleRemoveFromCart}
-                handleAddQuantity={handleAddQuantity}
-                handleRemoveQuantity={handleRemoveQuantity}
-                handleClearCart={handleClearCart}
-                
-              />
-            </div>
-          </div>
-        ) : (
-          <div>
-            <NavBar quantity={cartList.length} isAdmin={currentUser.isAdmin} currentUser = {currentUser.username} setCurrentUser={setCurrentUser}/>
-            <div className="GroceriesApp-Container">
-              <ProductFilterCard
-                selectedFilter={selectedFilter}
-                handleOnFilterSelect={handleOnFilterSelect}
-              />
-              <ProductsContainer
-                products={productList}
-                handleAddQuantity={handleAddQuantity}
-                handleRemoveQuantity={handleRemoveQuantity}
-                handleAddToCart={handleAddToCart}
-                productQuantity={productQuantity}
-              />
-              <CartContainer
-                cartList={cartList}
-                handleRemoveFromCart={handleRemoveFromCart}
-                handleAddQuantity={handleAddQuantity}
-                handleRemoveQuantity={handleRemoveQuantity}
-                handleClearCart={handleClearCart}
-              />
-            </div>
-          </div>
-        )}
+      <NavBar
+        quantity={cartList.length}
+        isAdmin={currentUser.isAdmin}
+        currentUser={currentUser.username}
+        setCurrentUser={setCurrentUser}
+      />
+      <div className="GroceriesApp-Container">
+        <ProductFilterCard
+          selectedFilter={selectedFilter}
+          handleOnFilterSelect={handleOnFilterSelect}
+        />
+        <ProductsContainer
+          products={productList}
+          handleAddQuantity={handleAddQuantity}
+          handleRemoveQuantity={handleRemoveQuantity}
+          handleAddToCart={handleAddToCart}
+          productQuantity={productQuantity}
+          handleEditProduct={handleEditProduct}
+          handleDeleteProduct={handleDeleteProduct}
+          isAdmin={currentUser.isAdmin}
+        />
+        <CartContainer
+          cartList={cartList}
+          handleRemoveFromCart={handleRemoveFromCart}
+          handleAddQuantity={handleAddQuantity}
+          handleRemoveQuantity={handleRemoveQuantity}
+          handleClearCart={handleClearCart}
+        />
       </div>
-      {/*///////////Added for authentication*/}
+    </div>
+  ) : (
+    <div>
+      <NavBar
+        quantity={cartList.length}
+        isAdmin={currentUser.isAdmin}
+        currentUser={currentUser.username}
+        setCurrentUser={setCurrentUser}
+      />
+      <div className="GroceriesApp-Container">
+        <ProductFilterCard
+          selectedFilter={selectedFilter}
+          handleOnFilterSelect={handleOnFilterSelect}
+        />
+        <ProductsContainer
+          products={productList}
+          handleAddQuantity={handleAddQuantity}
+          handleRemoveQuantity={handleRemoveQuantity}
+          handleAddToCart={handleAddToCart}
+          productQuantity={productQuantity}
+        />
+        <CartContainer
+          cartList={cartList}
+          handleRemoveFromCart={handleRemoveFromCart}
+          handleAddQuantity={handleAddQuantity}
+          handleRemoveQuantity={handleRemoveQuantity}
+          handleClearCart={handleClearCart}
+        />
+      </div>
     </div>
   );
 }

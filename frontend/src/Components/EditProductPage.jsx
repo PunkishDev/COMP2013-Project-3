@@ -65,17 +65,11 @@ export default function EditProductPage() {
       await axios
         .patch(`http://localhost:3000/products/${productId}`, formData)
         .then((result) => {
+          if (result.status === 200) {
+            navigate("/main");
+          }
           setPostResponse(result.data);
         });
-      /*
-      setFormData({
-        productName: "",
-        brand: "",
-        image: "",
-        price: "",
-      });
-      setIsEditing(false);
-      */
     } catch (error) {
       console.log(error.message);
     }
