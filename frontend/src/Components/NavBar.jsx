@@ -1,11 +1,13 @@
 import Cookies from "js-cookie";
-import { Navigate, Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
-export default function NavBar({ quantity, isAdmin, currentUser }) {
+export default function NavBar({ quantity, isAdmin, currentUser, setCurrentUser}) {
+  const navigate = useNavigate();
+
   const handleLogout = () => {
     Cookies.remove("jwt-authorization");
     setCurrentUser("");
-    Navigate("/");
+    navigate("/");
   };
 
   return (
