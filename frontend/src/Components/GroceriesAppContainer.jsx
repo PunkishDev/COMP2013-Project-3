@@ -254,7 +254,7 @@ export default function GroceriesAppContainer() {
       <div>
         {currentUser.isAdmin ? (
           <div>
-            <NavBar quantity={cartList.length} isAdmin={currentUser.isAdmin} currentUser = {currentUser.username}/>
+            <NavBar quantity={cartList.length} isAdmin={currentUser.isAdmin} currentUser = {currentUser.username} setCurrentUser={setCurrentUser}/>
             <div className="GroceriesApp-Container">
               {/* <ProductForm
                 handleOnSubmit={handleOnSubmit}
@@ -289,7 +289,7 @@ export default function GroceriesAppContainer() {
           </div>
         ) : (
           <div>
-            <NavBar quantity={cartList.length} isAdmin={currentUser.isAdmin} currentUser = {currentUser.username}/>
+            <NavBar quantity={cartList.length} isAdmin={currentUser.isAdmin} currentUser = {currentUser.username} setCurrentUser={setCurrentUser}/>
             <div className="GroceriesApp-Container">
               <ProductFilterCard
                 selectedFilter={selectedFilter}
