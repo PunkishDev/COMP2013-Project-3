@@ -9,6 +9,7 @@ export default function CartCard({
   handleRemoveFromCart,
   handleAddQuantity,
   handleRemoveQuantity,
+  
 }) {
   return (
     <div className="CartCard">

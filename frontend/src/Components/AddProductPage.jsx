@@ -89,4 +89,4 @@ export default function AddProductPage() {
       <Link to="/main">return to main page</Link>
     </div>
   );
-}
+};
